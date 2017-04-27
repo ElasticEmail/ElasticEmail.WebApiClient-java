@@ -1,4 +1,4 @@
-**This library allows you to quickly and easily use the Elastic Email Web API v2 via JavaScript.**
+**This library allows you to quickly and easily use the Elastic Email Web API v2 via Java.**
 
 # Prerequisites #
 * [An Elastic Email account](https://elasticemail.com/account/)

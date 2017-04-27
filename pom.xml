@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <groupId>com.elasticemail.app</groupId>
+ <artifactId>webapiclient</artifactId>
+ <version>1.0</version>
+ <packaging>jar</packaging>
+
+ <name>webapiclient</name>
+ <description>Easily send emails with Elastic Email using Web API Java Client/description>
+ <url>https://github.com/ElasticEmail/ElasticEmail.WebApiClient-java</url>
+ <licenses>
+  <license>
+   <name>MIT License</name>
+   <url>https://github.com/ElasticEmail/ElasticEmail.WebApiClient-csharp/blob/master/LICENSE</url>
+  </license>
+ </licenses>
+ <developers>
+  <developer>
+   <name>ElasticEmail Dev Team</name>
+   <email>support@elasticemail.com</email>
+   <organization>Elastic Email Inc.</organization>
+   <organizationUrl>https://elasticemail.com</organizationUrl>
+  </developer>
+ </developers>
+ <scm>
+  <connection>scm:git:https://github.com/ElasticEmail/ElasticEmail.WebApiClient-java.git</connection>
+  <developerConnection>scm:git:ssh://github.com:ElasticEmail/ElasticEmail.WebApiClient-java.git</developerConnection>
+  <url>http://github.com/ElasticEmail/ElasticEmail.WebApiClient-java/tree/master</url>
+ </scm>
+
+</project>

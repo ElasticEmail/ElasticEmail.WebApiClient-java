@@ -1,0 +1,19 @@
+gpg -ab API.java
+gpg -ab APIResponse.java
+gpg -ab ApiTypes.java
+gpg -ab FileData.java
+gpg -ab functions\Account.java
+gpg -ab functions\Attachment.java
+gpg -ab functions\Campaign.java
+gpg -ab functions\Channel.java
+gpg -ab functions\Contact.java
+gpg -ab functions\Domain.java
+gpg -ab functions\Eksport.java
+gpg -ab functions\Email.java
+gpg -ab functions\List.java
+gpg -ab functions\Log.java
+gpg -ab functions\Segment.java
+gpg -ab functions\SMS.java
+gpg -ab functions\Survey.java
+gpg -ab functions\Template.java
+

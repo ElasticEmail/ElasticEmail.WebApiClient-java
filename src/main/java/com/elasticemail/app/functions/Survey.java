@@ -49,7 +49,7 @@ public class Survey extends API
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param publicSurveyID Survey identifier
      * @param fileName Name of your file.
-     * @param fileFormat 
+     * @param fileFormat Format of the exported file
      * @param compressionFormat FileResponse compression format. None or Zip.
      * @return ApiTypes.ExportLink
      * @throws Exception

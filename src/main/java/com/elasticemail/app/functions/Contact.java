@@ -18,21 +18,6 @@ import com.elasticemail.app.APIResponse.VoidApiResponse;
 public class Contact extends API
 {
     /**
-     * Activate contacts that are currently blocked.
-     * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
-     * @param activateAllBlocked Activate all your blocked contacts.  Passing True will override email list and activate all your blocked contacts.
-     * @param emails Comma delimited list of contact emails
-     * @throws Exception
-     */
-    public void activateBlocked(Boolean activateAllBlocked, StringArray emails) throws Exception {
-       HashMap<String, String> values = new HashMap<String, String>();
-       values.put("apikey", API_KEY);
-       values.put("activateAllBlocked", String.valueOf(activateAllBlocked));
-       if (emails != null) values.put("emails", joinList(emails));
-       uploadValues(API_URI + "/contact/activateblocked", values, VoidApiResponse.class);
-   }
-
-    /**
      * Add a new contact and optionally to one of your lists.  Note that your API KEY is not required for this call.
      * @param publicAccountID Public key for limited access to your account such as contact/add so you can use it safely on public websites.
      * @param email Proper email address.
@@ -99,7 +84,9 @@ public class Contact extends API
        values.put("sendActivation", String.valueOf(sendActivation));
        if (consentDate != null) values.put("consentDate", String.valueOf(consentDate));
        values.put("consentIP", consentIP);
-       if (field != null) values.put("field", String.valueOf(field));
+       if (field != null) 
+           for (String key : field.keySet())
+              values.put("field_" + key, field.get(key));
        values.put("notifyEmail", notifyEmail);
        return uploadValues(API_URI + "/contact/add", values, String.class);
    }
@@ -191,7 +178,7 @@ public class Contact extends API
     /**
      * Export selected Contacts to JSON.
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
-     * @param fileFormat 
+     * @param fileFormat Format of the exported file
      * @param rule Query used for filtering.
      * @param emails Comma delimited list of contact emails
      * @param allContacts True: Include every Contact in your Account. Otherwise, false
@@ -285,8 +272,8 @@ public class Contact extends API
     /**
      * Load blocked contacts
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
-     * @param statuses List of comma separated message statuses: 0 or all, 1 for ReadyToSend, 2 for InProgress, 4 for Bounced, 5 for Sent, 6 for Opened, 7 for Clicked, 8 for Unsubscribed, 9 for Abuse Report
-     * @param search List of blocked statuses: Abuse, Bounced or Unsubscribed
+     * @param statuses List of blocked statuses: Abuse, Bounced or Unsubscribed
+     * @param search Text fragment used for searching.
      * @param limit Maximum of loaded items.
      * @param offset How many items should be loaded ahead.
      * @return ApiTypes.BlockedContactArray
@@ -380,6 +367,18 @@ public class Contact extends API
    }
 
     /**
+     * Basic double opt-in email subscribe form for your account.  This can be used for contacts that need to re-subscribe as well.
+     * @param publicAccountID Public key for limited access to your account such as contact/add so you can use it safely on public websites.
+     * @return String
+     * @throws Exception
+     */
+    public String subscribe(String publicAccountID) throws Exception {
+       HashMap<String, String> values = new HashMap<String, String>();
+       values.put("publicAccountID", publicAccountID);
+       return uploadValues(API_URI + "/contact/subscribe", values, String.class);
+   }
+
+    /**
      * Update selected contact. Omitted contact's fields will be reset by default (see the clearRestOfFields parameter)
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param email Proper email address.
@@ -453,7 +452,9 @@ public class Contact extends API
        values.put("pageViews", String.valueOf(pageViews));
        values.put("visits", String.valueOf(visits));
        values.put("clearRestOfFields", String.valueOf(clearRestOfFields));
-       if (field != null) values.put("field", String.valueOf(field));
+       if (field != null) 
+           for (String key : field.keySet())
+              values.put("field_" + key, field.get(key));
        return uploadValues(API_URI + "/contact/update", values, ApiTypes.Contact.class);
    }
 

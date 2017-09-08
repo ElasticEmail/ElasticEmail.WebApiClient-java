@@ -363,6 +363,11 @@ public class ApiTypes {
        public Boolean webnotificationforerror;
 
        /**
+        * True, if you want to receive notifications for each type only once per email. Otherwise, false
+        */
+       public Boolean webnotificationnotifyonceperemail;
+
+       /**
         * True, if you want to receive low credit email notifications. Otherwise, false
         */
        public Boolean lowcreditnotification;
@@ -473,9 +478,14 @@ public class ApiTypes {
        public int stalecontactscore;
 
        /**
-        * 
+        * (0 means this functionality is NOT enabled) Number of days of inactivity for a contact after which the given recipient should be moved to the Stale status
         */
        public int stalecontactinactivedays;
+
+       /**
+        * Why your clients are receiving your emails.
+        */
+       public String deliveryreason;
 
    }
 
@@ -511,7 +521,7 @@ public class ApiTypes {
        /**
         * ID number of your attachment
         */
-       public String id;
+       public long id;
 
        /**
         * Size of your attachment.
@@ -647,7 +657,7 @@ public class ApiTypes {
        public ApiTypes.CampaignStatus status;
 
        /**
-        * List of Segment and List IDs, comma separated
+        * List of Segment and List IDs, preceded with 'l' for Lists and 's' for Segments, comma separated
         */
        public String[] targets;
 
@@ -667,12 +677,12 @@ public class ApiTypes {
        public double triggerdelay;
 
        /**
-        * When your next automatic mail will be sent, in days
+        * When your next automatic mail will be sent, in minutes
         */
        public double triggerfrequency;
 
        /**
-        * Date of send
+        * How many times should the campaign be sent
         */
        public int triggercount;
 
@@ -758,7 +768,7 @@ public class ApiTypes {
        public int parentchannelid;
 
        /**
-        * List of Segment and List IDs, comma separated
+        * List of Segment and List IDs, preceded with 'l' for Lists and 's' for Segments, comma separated
         */
        public String[] targets;
 
@@ -778,12 +788,12 @@ public class ApiTypes {
        public double triggerdelay;
 
        /**
-        * When your next automatic mail will be sent, in days
+        * When your next automatic mail will be sent, in minutes
         */
        public double triggerfrequency;
 
        /**
-        * Date of send
+        * How many times should the campaign be sent
         */
        public int triggercount;
 
@@ -1423,6 +1433,16 @@ public class ApiTypes {
         */
        public String templatename;
 
+       /**
+        * IP Address of the event.
+        */
+       public String ipaddress;
+
+       /**
+        * Country of the event.
+        */
+       public String country;
+
    }
 
    /**
@@ -1497,7 +1517,12 @@ public class ApiTypes {
        /**
         * Contact has not been opening emails for a long period of time and is not eligible to be sent to.
         */
-       STALE
+       STALE,
+
+       /**
+        * Contact has not confirmed their double opt-in activation and is not eligible to be sent to.
+        */
+       NOTCONFIRMED
    }
 
    /**
@@ -1543,6 +1568,11 @@ public class ApiTypes {
         * 
         */
        public long stale;
+
+       /**
+        * 
+        */
+       public long notconfirmed;
 
    }
 
@@ -1758,6 +1788,16 @@ public class ApiTypes {
         * Total emails sent.
         */
        public int failedcount;
+
+       /**
+        * 
+        */
+       public StringArray sent;
+
+       /**
+        * Total emails sent.
+        */
+       public int sentcount;
 
        /**
         * Number of delivered messages
@@ -2078,6 +2118,21 @@ public class ApiTypes {
    }
 
    /**
+    * 
+    */
+   public enum IntervalType {
+       /**
+        * Daily overview
+        */
+       SUMMARY,
+
+       /**
+        * Hourly, detailed information
+        */
+       HOURLY
+   }
+
+   /**
     * Object containig tracking data.
     */
    public static class LinkTrackingDetails {
@@ -2099,7 +2154,7 @@ public class ApiTypes {
    }
 
    /**
-    * List of Contacts, with detailed data about its contents.
+    * List of Lists, with detailed data about its contents.
     */
    public static class List {
        /**
@@ -2180,6 +2235,11 @@ public class ApiTypes {
     * 
     */
    public enum LogJobStatus {
+       /**
+        * All emails
+        */
+       ALL,
+
        /**
         * Email has been submitted successfully and is queued for sending.
         */
@@ -2465,6 +2525,26 @@ public class ApiTypes {
    }
 
    /**
+    * 
+    */
+   public enum NotificationType {
+       /**
+        * Both, email and web, notifications
+        */
+       ALL,
+
+       /**
+        * Only email notifications
+        */
+       EMAIL,
+
+       /**
+        * Only web notifications
+        */
+       WEB
+   }
+
+   /**
     * Detailed information about existing money transfers.
     */
    public static class Payment {
@@ -2679,6 +2759,11 @@ public class ApiTypes {
         * Comma separated ID numbers of messages.
         */
        public String messagesid;
+
+       /**
+        * Recipient's last bounce error because of which this e-mail was suppressed
+        */
+       public String contactlasterror;
 
    }
 
@@ -3194,6 +3279,26 @@ public class ApiTypes {
         */
        public String status;
 
+       /**
+        * Maximum size of email including attachments in MB's
+        */
+       public int emailsizelimit;
+
+       /**
+        * Maximum number of contacts the account can have
+        */
+       public int maxcontacts;
+
+       /**
+        * True, if you want to use Advanced Tools.  Otherwise, false
+        */
+       public Boolean enablecontactfeatures;
+
+       /**
+        * Sending permission setting for account
+        */
+       public ApiTypes.SendingPermission sendingpermission;
+
    }
 
    /**
@@ -3246,7 +3351,7 @@ public class ApiTypes {
        public int dailysendlimit;
 
        /**
-        * Maximum number of contacts the account can havelkd
+        * Maximum number of contacts the account can have
         */
        public int maxcontacts;
 
@@ -3297,6 +3402,11 @@ public class ApiTypes {
        public Date dateupdated;
 
        /**
+        * 
+        */
+       public Date expirydate;
+
+       /**
         * Filename
         */
        public String name;
@@ -3312,9 +3422,9 @@ public class ApiTypes {
        public int resultcount;
 
        /**
-        * Survey's steps info
+        * 
         */
-       public ApiTypes.SurveyStepArray surveystep;
+       public ApiTypes.SurveyStepArray surveysteps;
 
        /**
         * URL of the survey
@@ -3376,18 +3486,23 @@ public class ApiTypes {
    }
 
    /**
-    * Summary with all the answers
+    * 
     */
-   public static class SurveyResultsSummary {
+   public static class SurveyResultsAnswer {
        /**
-        * Answers' statistics
+        * Identifier of the answer of the step
         */
-       public HashMap<String, Integer> answers;
+       public String surveystepanswerid;
 
        /**
-        * Open answers for the question
+        * Number of items.
         */
-       public StringArray openanswers;
+       public int count;
+
+       /**
+        * Answer's content
+        */
+       public String content;
 
    }
 
@@ -3403,7 +3518,7 @@ public class ApiTypes {
        /**
         * Summary statistics
         */
-       public HashMap<Integer, SurveyResultsSummary> summary;
+       public HashMap<Integer, ApiTypes.SurveyResultsAnswerArray> summary;
 
    }
 
@@ -3419,7 +3534,7 @@ public class ApiTypes {
        /**
         * The survey is not receiving result for now
         */
-       PAUSED,
+       EXPIRED,
 
        /**
         * The survey is active and receiving answers
@@ -3462,9 +3577,9 @@ public class ApiTypes {
        public int sequence;
 
        /**
-        * Answer object of the step
+        * 
         */
-       public ApiTypes.SurveyStepAnswerArray surveystepanswer;
+       public ApiTypes.SurveyStepAnswerArray surveystepanswers;
 
    }
 
@@ -3671,6 +3786,122 @@ public class ApiTypes {
     * Account usage
     */
    public static class Usage {
+       /**
+        * Proper email address.
+        */
+       public String email;
+
+       /**
+        * True, if this account is a sub-account. Otherwise, false
+        */
+       public Boolean issubaccount;
+
+       /**
+        * 
+        */
+       public ApiTypes.UsageDataArray list;
+
+   }
+
+   /**
+    * Detailed data about daily usage
+    */
+   public static class UsageData {
+       /**
+        * Date in YYYY-MM-DDThh:ii:ss format
+        */
+       public Date date;
+
+       /**
+        * Number of finished tasks
+        */
+       public int jobcount;
+
+       /**
+        * Overall number of recipients
+        */
+       public int recipientcount;
+
+       /**
+        * Number of inbound emails
+        */
+       public int inboundcount;
+
+       /**
+        * Number of attachments sent
+        */
+       public int attachmentcount;
+
+       /**
+        * Size of attachments sent
+        */
+       public long attachmentssize;
+
+       /**
+        * Calculated cost of sending
+        */
+       public BigDecimal cost;
+
+       /**
+        * Number of pricate IPs
+        */
+       public int privateipcount;
+
+       /**
+        * 
+        */
+       public BigDecimal privateipcost;
+
+       /**
+        * Number of SMS
+        */
+       public int smscount;
+
+       /**
+        * Overall cost of SMS
+        */
+       public BigDecimal smscost;
+
+       /**
+        * Cost of templates
+        */
+       public BigDecimal templatecost;
+
+       /**
+        * Cost of email credits
+        */
+       public int emailcreditscost;
+
+       /**
+        * Cost of template credit
+        */
+       public int templatecreditscost;
+
+       /**
+        * Cost of litmus credits
+        */
+       public BigDecimal litmuscost;
+
+       /**
+        * Cost of 1 litmus credit
+        */
+       public BigDecimal litmuscreditscost;
+
+       /**
+        * Daily cost of Advanced Tools
+        */
+       public BigDecimal contactcost;
+
+       /**
+        * Number of contacts
+        */
+       public long contactcount;
+
+       /**
+        * 
+        */
+       public BigDecimal supportcost;
+
    }
 
    public static class AttachmentArray extends ArrayList<Attachment> { }
@@ -3735,6 +3966,8 @@ public class ApiTypes {
 
    public static class SurveyResultInfoArray extends ArrayList<SurveyResultInfo> { }
 
+   public static class SurveyResultsAnswerArray extends ArrayList<SurveyResultsAnswer> { }
+
    public static class SurveyStepArray extends ArrayList<SurveyStep> { }
 
    public static class SurveyStepAnswerArray extends ArrayList<SurveyStepAnswer> { }
@@ -3744,5 +3977,7 @@ public class ApiTypes {
    public static class TrackedLinkArray extends ArrayList<TrackedLink> { }
 
    public static class UsageArray extends ArrayList<Usage> { }
+
+   public static class UsageDataArray extends ArrayList<UsageData> { }
 
 }

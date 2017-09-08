@@ -22,7 +22,8 @@ public class Email extends API
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param transactionID Transaction identifier
      * @param showFailed Include Bounced email addresses.
-     * @param showDelivered Include Sent email addresses.
+     * @param showSent Include Sent email addresses.
+     * @param showDelivered Include all delivered email addresses.
      * @param showPending Include Ready to send email addresses.
      * @param showOpened Include Opened email addresses.
      * @param showClicked Include Clicked email addresses.
@@ -33,11 +34,12 @@ public class Email extends API
      * @return ApiTypes.EmailJobStatus
      * @throws Exception
      */
-    public ApiTypes.EmailJobStatus getStatus(String transactionID, Boolean showFailed, Boolean showDelivered, Boolean showPending, Boolean showOpened, Boolean showClicked, Boolean showAbuse, Boolean showUnsubscribed, Boolean showErrors, Boolean showMessageIDs) throws Exception {
+    public ApiTypes.EmailJobStatus getStatus(String transactionID, Boolean showFailed, Boolean showSent, Boolean showDelivered, Boolean showPending, Boolean showOpened, Boolean showClicked, Boolean showAbuse, Boolean showUnsubscribed, Boolean showErrors, Boolean showMessageIDs) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("transactionID", transactionID);
        values.put("showFailed", String.valueOf(showFailed));
+       values.put("showSent", String.valueOf(showSent));
        values.put("showDelivered", String.valueOf(showDelivered));
        values.put("showPending", String.valueOf(showPending));
        values.put("showOpened", String.valueOf(showOpened));
@@ -75,7 +77,7 @@ public class Email extends API
      * @param charsetBodyHtml Sets charset for body html MIME part (overrides default value from charset parameter)
      * @param charsetBodyText Sets charset for body text MIME part (overrides default value from charset parameter)
      * @param encodingType 0 for None, 1 for Raw7Bit, 2 for Raw8Bit, 3 for QuotedPrintable, 4 for Base64 (Default), 5 for Uue  note that you can also provide the text version such as "Raw7Bit" for value 1.  NOTE: Base64 or QuotedPrintable is recommended if you are validating your domain(s) with DKIM.
-     * @param template The name of an email template you have created in your account.
+     * @param template The ID of an email template you have created in your account.
      * @param attachmentFiles Attachment files. These files should be provided with the POST multipart file upload, not directly in the request's URL. Should also include merge CSV file
      * @param headers Optional Custom Headers. Request parameters prefixed by headers_ like headers_customheader1, headers_customheader2. Note: a space is required after the colon before the custom header value. headers_xmailer=xmailer: header-value1
      * @param postBack Optional header returned in notifications.
@@ -113,9 +115,13 @@ public class Email extends API
        values.put("charsetBodyText", charsetBodyText);
        values.put("encodingType", String.valueOf(encodingType));
        values.put("template", template);
-       if (headers != null) values.put("headers", String.valueOf(headers));
+       if (headers != null) 
+           for (String key : headers.keySet())
+              values.put("headers_" + key, key + ": " + headers.get(key));
        values.put("postBack", postBack);
-       if (merge != null) values.put("merge", String.valueOf(merge));
+       if (merge != null) 
+           for (String key : merge.keySet())
+              values.put("merge_" + key, merge.get(key));
        values.put("timeOffSetMinutes", timeOffSetMinutes);
        values.put("poolName", poolName);
        values.put("isTransactional", String.valueOf(isTransactional));

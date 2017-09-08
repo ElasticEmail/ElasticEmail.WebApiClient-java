@@ -42,7 +42,7 @@ public class List extends API
    }
 
     /**
-     * Add Contacts to chosen list
+     * Add existing Contacts to chosen list
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param listName Name of your list.
      * @param rule Query used for filtering.
@@ -164,7 +164,7 @@ public class List extends API
      * Exports all the contacts from the provided list
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param listName Name of your list.
-     * @param fileFormat 
+     * @param fileFormat Format of the exported file
      * @param compressionFormat FileResponse compression format. None or Zip.
      * @param fileName Name of your file.
      * @return ApiTypes.ExportLink

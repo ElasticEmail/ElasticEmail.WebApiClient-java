@@ -35,13 +35,14 @@ public class Campaign extends API
      * Copy selected campaign
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param channelID ID number of selected Channel.
+     * @return int
      * @throws Exception
      */
-    public void copy(int channelID) throws Exception {
+    public int copy(int channelID) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("channelID", String.valueOf(channelID));
-       uploadValues(API_URI + "/campaign/copy", values, VoidApiResponse.class);
+       return uploadValues(API_URI + "/campaign/copy", values, int.class);
    }
 
     /**
@@ -61,7 +62,7 @@ public class Campaign extends API
      * Export selected campaigns to chosen file format.
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param channelIDs List of campaign IDs used for processing
-     * @param fileFormat 
+     * @param fileFormat Format of the exported file
      * @param compressionFormat FileResponse compression format. None or Zip.
      * @param fileName Name of your file.
      * @return ApiTypes.ExportLink

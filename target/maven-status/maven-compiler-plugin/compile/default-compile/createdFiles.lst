@@ -12,6 +12,7 @@ com\elasticemail\app\ApiTypes$Segment.class
 com\elasticemail\app\ApiTypes$ReputationHistoryArray.class
 com\elasticemail\app\ApiTypes$Referral.class
 com\elasticemail\app\API.class
+com\elasticemail\app\ApiTypes$NotificationType.class
 com\elasticemail\app\ApiTypes$BlockedContact.class
 com\elasticemail\app\ApiTypes$CampaignChannel.class
 com\elasticemail\app\functions\Email.class
@@ -28,6 +29,7 @@ com\elasticemail\app\ApiTypes$NotificationQueue.class
 com\elasticemail\app\ApiTypes$SpamRule.class
 com\elasticemail\app\ApiTypes$EmailSend.class
 com\elasticemail\app\ApiTypes$BlockedContactArray.class
+com\elasticemail\app\ApiTypes$UsageData.class
 com\elasticemail\app\ApiTypes$EmailJobStatus.class
 com\elasticemail\app\functions\Segment.class
 com\elasticemail\app\ApiTypes$TemplateList.class
@@ -47,8 +49,10 @@ com\elasticemail\app\ApiTypes$UsageArray.class
 com\elasticemail\app\ApiTypes$APIKeyAction.class
 com\elasticemail\app\ApiTypes$AdvancedOptions.class
 com\elasticemail\app\ApiTypes$CampaignTriggerType.class
+com\elasticemail\app\ApiTypes$SurveyResultsAnswer.class
 com\elasticemail\app\ApiTypes$ExportTypeCounts.class
 com\elasticemail\app\ApiTypes$Export.class
+com\elasticemail\app\ApiTypes$IntervalType.class
 com\elasticemail\app\ApiTypes$SurveyStepType.class
 com\elasticemail\app\ApiTypes$Contact.class
 com\elasticemail\app\ApiTypes$SurveyStepAnswer.class
@@ -59,6 +63,8 @@ com\elasticemail\app\functions\Account.class
 com\elasticemail\app\ApiTypes$ContactCollection.class
 com\elasticemail\app\ApiTypes$Usage.class
 com\elasticemail\app\ApiTypes$SurveyArray.class
+com\elasticemail\app\ApiTypes$UsageDataArray.class
+com\elasticemail\app\ApiTypes$SurveyResultsAnswerArray.class
 com\elasticemail\app\ApiTypes$SurveyStepArray.class
 com\elasticemail\app\ApiTypes$BouncedCategorySummary.class
 com\elasticemail\app\ApiTypes$TemplateArray.class
@@ -88,6 +94,7 @@ com\elasticemail\app\ApiTypes$TrackedLinkArray.class
 com\elasticemail\app\ApiTypes$AccountOverview.class
 com\elasticemail\app\ApiTypes$Channel.class
 com\elasticemail\app\ApiTypes$DomainDetail.class
+com\elasticemail\app\functions\Export.class
 com\elasticemail\app\ApiTypes$Attachment.class
 com\elasticemail\app\ApiTypes$SurveyStepAnswerArray.class
 com\elasticemail\app\ApiTypes$RecipientArray.class
@@ -116,7 +123,6 @@ com\elasticemail\app\ApiTypes$Account.class
 com\elasticemail\app\ApiTypes$ReputationDetail.class
 com\elasticemail\app\ApiTypes$ContactArray.class
 com\elasticemail\app\ApiTypes$Survey.class
-com\elasticemail\app\ApiTypes$SurveyResultsSummary.class
 com\elasticemail\app\ApiTypes$CampaignStatus.class
 com\elasticemail\app\ApiTypes$Log.class
 com\elasticemail\app\ApiTypes$LogJobStatus.class

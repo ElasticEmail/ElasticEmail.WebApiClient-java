@@ -35,8 +35,8 @@ public class Log extends API
     /**
      * Export email log information to the specified file format.
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
-     * @param statuses List of comma separated message statuses: 0 or all, 1 for ReadyToSend, 2 for InProgress, 4 for Bounced, 5 for Sent, 6 for Opened, 7 for Clicked, 8 for Unsubscribed, 9 for Abuse Report
-     * @param fileFormat 
+     * @param statuses List of comma separated message statuses: 0 for all, 1 for ReadyToSend, 2 for InProgress, 4 for Bounced, 5 for Sent, 6 for Opened, 7 for Clicked, 8 for Unsubscribed, 9 for Abuse Report
+     * @param fileFormat Format of the exported file
      * @param from Start date.
      * @param to End date.
      * @param channelID ID number of selected Channel.
@@ -74,9 +74,9 @@ public class Log extends API
      * Export detailed link tracking information to the specified file format.
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param channelID ID number of selected Channel.
-     * @param from Start date.
-     * @param to End Date.
-     * @param fileFormat 
+     * @param from Starting date for search in YYYY-MM-DDThh:mm:ss format.
+     * @param to Ending date for search in YYYY-MM-DDThh:mm:ss format.
+     * @param fileFormat Format of the exported file
      * @param limit Maximum of loaded items.
      * @param offset How many items should be loaded ahead.
      * @param compressionFormat FileResponse compression format. None or Zip.
@@ -123,7 +123,7 @@ public class Log extends API
     /**
      * Returns logs filtered by specified parameters.
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
-     * @param statuses List of comma separated message statuses: 0 or all, 1 for ReadyToSend, 2 for InProgress, 4 for Bounced, 5 for Sent, 6 for Opened, 7 for Clicked, 8 for Unsubscribed, 9 for Abuse Report
+     * @param statuses List of comma separated message statuses: 0 for all, 1 for ReadyToSend, 2 for InProgress, 4 for Bounced, 5 for Sent, 6 for Opened, 7 for Clicked, 8 for Unsubscribed, 9 for Abuse Report
      * @param from Starting date for search in YYYY-MM-DDThh:mm:ss format.
      * @param to Ending date for search in YYYY-MM-DDThh:mm:ss format.
      * @param channelName Name of selected channel.
@@ -133,10 +133,11 @@ public class Log extends API
      * @param includeSms True: Search includes SMS. Otherwise, false.
      * @param messageCategory ID of message category
      * @param email Proper email address.
+     * @param useStatusChangeDate True, if 'from' and 'to' parameters should resolve to the Status Change date. To resolve to the creation date - false
      * @return ApiTypes.Log
      * @throws Exception
      */
-    public ApiTypes.Log load(ApiTypes.LogJobStatusArray statuses, Date from, Date to, String channelName, int limit, int offset, Boolean includeEmail, Boolean includeSms, ApiTypes.MessageCategoryArray messageCategory, String email) throws Exception {
+    public ApiTypes.Log load(ApiTypes.LogJobStatusArray statuses, Date from, Date to, String channelName, int limit, int offset, Boolean includeEmail, Boolean includeSms, ApiTypes.MessageCategoryArray messageCategory, String email, Boolean useStatusChangeDate) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        if (statuses != null) values.put("statuses", joinList(statuses));
@@ -149,7 +150,36 @@ public class Log extends API
        values.put("includeSms", String.valueOf(includeSms));
        if (messageCategory != null) if (messageCategory != null) values.put("messageCategory", joinList(messageCategory));
        values.put("email", email);
+       values.put("useStatusChangeDate", String.valueOf(useStatusChangeDate));
        return uploadValues(API_URI + "/log/load", values, ApiTypes.Log.class);
+   }
+
+    /**
+     * Returns notification logs filtered by specified parameters.
+     * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
+     * @param statuses List of comma separated message statuses: 0 for all, 1 for ReadyToSend, 2 for InProgress, 4 for Bounced, 5 for Sent, 6 for Opened, 7 for Clicked, 8 for Unsubscribed, 9 for Abuse Report
+     * @param from Starting date for search in YYYY-MM-DDThh:mm:ss format.
+     * @param to Ending date for search in YYYY-MM-DDThh:mm:ss format.
+     * @param limit Maximum of loaded items.
+     * @param offset How many items should be loaded ahead.
+     * @param messageCategory ID of message category
+     * @param useStatusChangeDate True, if 'from' and 'to' parameters should resolve to the Status Change date. To resolve to the creation date - false
+     * @param notificationType 
+     * @return ApiTypes.Log
+     * @throws Exception
+     */
+    public ApiTypes.Log loadNotifications(ApiTypes.LogJobStatusArray statuses, Date from, Date to, int limit, int offset, ApiTypes.MessageCategoryArray messageCategory, Boolean useStatusChangeDate, ApiTypes.NotificationType notificationType) throws Exception {
+       HashMap<String, String> values = new HashMap<String, String>();
+       values.put("apikey", API_KEY);
+       if (statuses != null) values.put("statuses", joinList(statuses));
+       if (from != null) values.put("from", String.valueOf(from));
+       if (to != null) values.put("to", String.valueOf(to));
+       values.put("limit", String.valueOf(limit));
+       values.put("offset", String.valueOf(offset));
+       if (messageCategory != null) if (messageCategory != null) values.put("messageCategory", joinList(messageCategory));
+       values.put("useStatusChangeDate", String.valueOf(useStatusChangeDate));
+       values.put("notificationType", String.valueOf(notificationType));
+       return uploadValues(API_URI + "/log/loadnotifications", values, ApiTypes.Log.class);
    }
 
     /**
@@ -176,13 +206,13 @@ public class Log extends API
      * @return ApiTypes.LogSummary
      * @throws Exception
      */
-    public ApiTypes.LogSummary summary(Date from, Date to, String channelName, String interval, String transactionID) throws Exception {
+    public ApiTypes.LogSummary summary(Date from, Date to, String channelName, ApiTypes.IntervalType interval, String transactionID) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("from", String.valueOf(from));
        values.put("to", String.valueOf(to));
        values.put("channelName", channelName);
-       values.put("interval", interval);
+       values.put("interval", String.valueOf(interval));
        values.put("transactionID", transactionID);
        return uploadValues(API_URI + "/log/summary", values, ApiTypes.LogSummary.class);
    }

@@ -16,6 +16,7 @@ import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
+
 public class API {
 	
 	public static String API_KEY = "";
@@ -53,6 +54,7 @@ public class API {
             String formdataTemplate = "Content-Disposition: form-data; name=\"%s\"\r\n\r\n%s";
             for (String key : values.keySet())
             {
+            	if (values.get(key) == null) continue;
                 wr.write(boundarybytes, 0, boundarybytes.length);
                 String formitem = String.format(formdataTemplate, key, values.get(key));
                 byte[] formitembytes = formitem.getBytes(Charset.forName("UTF8"));
@@ -196,8 +198,7 @@ public class API {
 		
 		return sb.toString();
 	}
-
-    protected <T> String joinList(Iterable<T> list){
+	protected <T> String joinList(Iterable<T> list){
 		StringBuilder sb = new StringBuilder();
 		
 		for (T item : list){

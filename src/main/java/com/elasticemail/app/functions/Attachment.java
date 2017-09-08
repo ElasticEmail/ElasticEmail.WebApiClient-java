@@ -33,15 +33,13 @@ public class Attachment extends API
     /**
      * Gets address of chosen Attachment
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
-     * @param fileName Name of your file.
      * @param attachmentID ID number of your attachment.
      * @return FileData
      * @throws Exception
      */
-    public FileData get(String fileName, long attachmentID) throws Exception {
+    public FileData get(long attachmentID) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
-       values.put("fileName", fileName);
        values.put("attachmentID", String.valueOf(attachmentID));
        return uploadValues(API_URI + "/attachment/get", values, FileData.class);
    }

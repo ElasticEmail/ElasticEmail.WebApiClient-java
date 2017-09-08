@@ -26,17 +26,19 @@ public class Account extends API
      * @param requiresEmailCredits True, if account needs credits to send emails. Otherwise, false
      * @param enableLitmusTest True, if account is able to send template tests to Litmus. Otherwise, false
      * @param requiresLitmusCredits True, if account needs credits to send emails. Otherwise, false
-     * @param maxContacts Maximum number of contacts the account can havelkd
+     * @param maxContacts Maximum number of contacts the account can have
      * @param enablePrivateIPRequest True, if account can request for private IP on its own. Otherwise, false
      * @param sendActivation True, if you want to send activation email to this account. Otherwise, false
      * @param returnUrl URL to navigate to after account creation
      * @param sendingPermission Sending permission setting for account
      * @param enableContactFeatures True, if you want to use Advanced Tools.  Otherwise, false
      * @param poolName Private IP required. Name of the custom IP Pool which Sub Account should use to send its emails. Leave empty for the default one or if no Private IPs have been bought
+     * @param emailSizeLimit Maximum size of email including attachments in MB's
+     * @param dailySendLimit Amount of emails account can send daily
      * @return String
      * @throws Exception
      */
-    public String addSubAccount(String email, String password, String confirmPassword, Boolean requiresEmailCredits, Boolean enableLitmusTest, Boolean requiresLitmusCredits, int maxContacts, Boolean enablePrivateIPRequest, Boolean sendActivation, String returnUrl, ApiTypes.SendingPermission sendingPermission, Boolean enableContactFeatures, String poolName) throws Exception {
+    public String addSubAccount(String email, String password, String confirmPassword, Boolean requiresEmailCredits, Boolean enableLitmusTest, Boolean requiresLitmusCredits, int maxContacts, Boolean enablePrivateIPRequest, Boolean sendActivation, String returnUrl, ApiTypes.SendingPermission sendingPermission, Boolean enableContactFeatures, String poolName, int emailSizeLimit, int dailySendLimit) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("email", email);
@@ -52,6 +54,8 @@ public class Account extends API
        if (sendingPermission != null) values.put("sendingPermission", String.valueOf(sendingPermission));
        values.put("enableContactFeatures", String.valueOf(enableContactFeatures));
        values.put("poolName", poolName);
+       values.put("emailSizeLimit", String.valueOf(emailSizeLimit));
+       values.put("dailySendLimit", String.valueOf(dailySendLimit));
        return uploadValues(API_URI + "/account/addsubaccount", values, String.class);
    }
 
@@ -79,18 +83,19 @@ public class Account extends API
     /**
      * Change your email address. Remember, that your email address is used as login!
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
-     * @param sourceUrl URL from which request was sent.
      * @param newEmail New email address.
      * @param confirmEmail New email address.
+     * @param sourceUrl URL from which request was sent.
+     * @return String
      * @throws Exception
      */
-    public void changeEmail(String sourceUrl, String newEmail, String confirmEmail) throws Exception {
+    public String changeEmail(String newEmail, String confirmEmail, String sourceUrl) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
-       values.put("sourceUrl", sourceUrl);
        values.put("newEmail", newEmail);
        values.put("confirmEmail", confirmEmail);
-       uploadValues(API_URI + "/account/changeemail", values, VoidApiResponse.class);
+       values.put("sourceUrl", sourceUrl);
+       return uploadValues(API_URI + "/account/changeemail", values, String.class);
    }
 
     /**
@@ -461,6 +466,7 @@ public class Account extends API
      * @param emailNotificationForError True, if you want bounce notifications returned. Otherwise, false
      * @param emailNotificationEmail Specific email address to send bounce email notifications to.
      * @param webNotificationUrl URL address to receive web notifications to parse and process.
+     * @param webNotificationNotifyOncePerEmail True, if you want to receive notifications for each type only once per email. Otherwise, false
      * @param webNotificationForSent True, if you want to send web notifications for sent email. Otherwise, false
      * @param webNotificationForOpened True, if you want to send web notifications for opened email. Otherwise, false
      * @param webNotificationForClicked True, if you want to send web notifications for clicked email. Otherwise, false
@@ -478,11 +484,13 @@ public class Account extends API
      * @param logoUrl URL to your logo image.
      * @param enableTemplateScripting True, if you want to use template scripting in your emails {{}}. Otherwise, false
      * @param staleContactScore (0 means this functionality is NOT enabled) Score, depending on the number of times you have sent to a recipient, at which the given recipient should be moved to the Stale status
-     * @param staleContactInactiveDays 
+     * @param staleContactInactiveDays (0 means this functionality is NOT enabled) Number of days of inactivity for a contact after which the given recipient should be moved to the Stale status
+     * @param deliveryReason Why your clients are receiving your emails.
+     * @param tutorialsEnabled 
      * @return ApiTypes.AdvancedOptions
      * @throws Exception
      */
-    public ApiTypes.AdvancedOptions updateAdvancedOptions(Boolean enableClickTracking, Boolean enableLinkClickTracking, Boolean manageSubscriptions, Boolean manageSubscribedOnly, Boolean transactionalOnUnsubscribe, Boolean skipListUnsubscribe, Boolean autoTextFromHtml, Boolean allowCustomHeaders, String bccEmail, String contentTransferEncoding, Boolean emailNotificationForError, String emailNotificationEmail, String webNotificationUrl, Boolean webNotificationForSent, Boolean webNotificationForOpened, Boolean webNotificationForClicked, Boolean webNotificationForUnsubscribed, Boolean webNotificationForAbuseReport, Boolean webNotificationForError, String hubCallBackUrl, String inboundDomain, Boolean inboundContactsOnly, Boolean lowCreditNotification, Boolean enableUITooltips, Boolean enableContactFeatures, String notificationsEmails, String unsubscribeNotificationsEmails, String logoUrl, Boolean enableTemplateScripting, int staleContactScore, int staleContactInactiveDays) throws Exception {
+    public ApiTypes.AdvancedOptions updateAdvancedOptions(Boolean enableClickTracking, Boolean enableLinkClickTracking, Boolean manageSubscriptions, Boolean manageSubscribedOnly, Boolean transactionalOnUnsubscribe, Boolean skipListUnsubscribe, Boolean autoTextFromHtml, Boolean allowCustomHeaders, String bccEmail, String contentTransferEncoding, Boolean emailNotificationForError, String emailNotificationEmail, String webNotificationUrl, Boolean webNotificationNotifyOncePerEmail, Boolean webNotificationForSent, Boolean webNotificationForOpened, Boolean webNotificationForClicked, Boolean webNotificationForUnsubscribed, Boolean webNotificationForAbuseReport, Boolean webNotificationForError, String hubCallBackUrl, String inboundDomain, Boolean inboundContactsOnly, Boolean lowCreditNotification, Boolean enableUITooltips, Boolean enableContactFeatures, String notificationsEmails, String unsubscribeNotificationsEmails, String logoUrl, Boolean enableTemplateScripting, int staleContactScore, int staleContactInactiveDays, String deliveryReason, Boolean tutorialsEnabled) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("enableClickTracking", String.valueOf(enableClickTracking));
@@ -498,6 +506,7 @@ public class Account extends API
        values.put("emailNotificationForError", String.valueOf(emailNotificationForError));
        values.put("emailNotificationEmail", emailNotificationEmail);
        values.put("webNotificationUrl", webNotificationUrl);
+       values.put("webNotificationNotifyOncePerEmail", String.valueOf(webNotificationNotifyOncePerEmail));
        values.put("webNotificationForSent", String.valueOf(webNotificationForSent));
        values.put("webNotificationForOpened", String.valueOf(webNotificationForOpened));
        values.put("webNotificationForClicked", String.valueOf(webNotificationForClicked));
@@ -516,6 +525,8 @@ public class Account extends API
        values.put("enableTemplateScripting", String.valueOf(enableTemplateScripting));
        values.put("staleContactScore", String.valueOf(staleContactScore));
        values.put("staleContactInactiveDays", String.valueOf(staleContactInactiveDays));
+       values.put("deliveryReason", deliveryReason);
+       values.put("tutorialsEnabled", String.valueOf(tutorialsEnabled));
        return uploadValues(API_URI + "/account/updateadvancedoptions", values, ApiTypes.AdvancedOptions.class);
    }
 
@@ -548,13 +559,15 @@ public class Account extends API
      * Update http notification URL.
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param url URL of notification.
+     * @param notifyOncePerEmail True, if you want to receive notifications for each type only once per email. Otherwise, false
      * @param settings Http notification settings serialized to JSON 
      * @throws Exception
      */
-    public void updateHttpNotification(String url, String settings) throws Exception {
+    public void updateHttpNotification(String url, Boolean notifyOncePerEmail, String settings) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("url", url);
+       values.put("notifyOncePerEmail", String.valueOf(notifyOncePerEmail));
        values.put("settings", settings);
        uploadValues(API_URI + "/account/updatehttpnotification", values, VoidApiResponse.class);
    }
@@ -569,8 +582,7 @@ public class Account extends API
      * @param state State or province.
      * @param zip Zip/postal code.
      * @param countryID Numeric ID of country. A file with the list of countries is available <a href="http://api.elasticemail.com/public/countries"><b>here</b></a>
-     * @param deliveryReason Why your clients are receiving your emails.
-     * @param marketingConsent True if you want to receive newsletters from Elastic Email. Otherwise, false.
+     * @param marketingConsent True if you want to receive newsletters from Elastic Email. Otherwise, false. Empty to leave the current value.
      * @param address2 Second line of address.
      * @param company Company name.
      * @param website HTTP address of your website.
@@ -579,7 +591,7 @@ public class Account extends API
      * @param phone Phone number
      * @throws Exception
      */
-    public void updateProfile(String firstName, String lastName, String address1, String city, String state, String zip, int countryID, String deliveryReason, Boolean marketingConsent, String address2, String company, String website, String logoUrl, String taxCode, String phone) throws Exception {
+    public void updateProfile(String firstName, String lastName, String address1, String city, String state, String zip, int countryID, Boolean marketingConsent, String address2, String company, String website, String logoUrl, String taxCode, String phone) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("firstName", firstName);
@@ -589,7 +601,6 @@ public class Account extends API
        values.put("state", state);
        values.put("zip", zip);
        values.put("countryID", String.valueOf(countryID));
-       values.put("deliveryReason", deliveryReason);
        values.put("marketingConsent", String.valueOf(marketingConsent));
        values.put("address2", address2);
        values.put("company", company);
@@ -610,7 +621,7 @@ public class Account extends API
      * @param dailySendLimit Amount of emails account can send daily
      * @param emailSizeLimit Maximum size of email including attachments in MB's
      * @param enablePrivateIPRequest True, if account can request for private IP on its own. Otherwise, false
-     * @param maxContacts Maximum number of contacts the account can havelkd
+     * @param maxContacts Maximum number of contacts the account can have
      * @param subAccountEmail Email address of sub-account
      * @param publicAccountID Public key of sub-account to update. Use subAccountEmail or publicAccountID not both.
      * @param sendingPermission Sending permission setting for account

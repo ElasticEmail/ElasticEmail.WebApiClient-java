@@ -68,7 +68,7 @@ public class Segment extends API
      * Exports all the contacts from the provided segment
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param segmentName Name of your segment.
-     * @param fileFormat 
+     * @param fileFormat Format of the exported file
      * @param compressionFormat FileResponse compression format. None or Zip.
      * @param fileName Name of your file.
      * @return ApiTypes.ExportLink
@@ -88,8 +88,8 @@ public class Segment extends API
      * Lists all your available Segments
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param includeHistory True: Include history of last 30 days. Otherwise, false.
-     * @param from From what date should the segment history be shown
-     * @param to To what date should the segment history be shown
+     * @param from From what date should the segment history be shown. In YYYY-MM-DDThh:mm:ss format.
+     * @param to To what date should the segment history be shown. In YYYY-MM-DDThh:mm:ss format.
      * @return ApiTypes.SegmentArray
      * @throws Exception
      */
@@ -107,8 +107,8 @@ public class Segment extends API
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param segmentNames Names of segments you want to load. Will load all contacts if left empty or the 'All Contacts' name has been provided
      * @param includeHistory True: Include history of last 30 days. Otherwise, false.
-     * @param from From what date should the segment history be shown
-     * @param to To what date should the segment history be shown
+     * @param from From what date should the segment history be shown. In YYYY-MM-DDThh:mm:ss format.
+     * @param to To what date should the segment history be shown. In YYYY-MM-DDThh:mm:ss format.
      * @return ApiTypes.SegmentArray
      * @throws Exception
      */

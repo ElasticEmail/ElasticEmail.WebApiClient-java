@@ -31,7 +31,7 @@ public class Account extends API
      * @param sendActivation True, if you want to send activation email to this account. Otherwise, false
      * @param returnUrl URL to navigate to after account creation
      * @param sendingPermission Sending permission setting for account
-     * @param enableContactFeatures True, if you want to use Advanced Tools.  Otherwise, false
+     * @param enableContactFeatures True, if you want to use Contact Delivery Tools.  Otherwise, false
      * @param poolName Private IP required. Name of the custom IP Pool which Sub Account should use to send its emails. Leave empty for the default one or if no Private IPs have been bought
      * @param emailSizeLimit Maximum size of email including attachments in MB's
      * @param dailySendLimit Amount of emails account can send daily
@@ -436,6 +436,17 @@ public class Account extends API
    }
 
     /**
+     * Request premium support for your account
+     * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
+     * @throws Exception
+     */
+    public void requestPremiumSupport() throws Exception {
+       HashMap<String, String> values = new HashMap<String, String>();
+       values.put("apikey", API_KEY);
+       uploadValues(API_URI + "/account/requestpremiumsupport", values, VoidApiResponse.class);
+   }
+
+    /**
      * Request a private IP for your Account
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param count Number of items.
@@ -478,7 +489,7 @@ public class Account extends API
      * @param inboundContactsOnly True, if you want inbound email to only process contacts from your account. Otherwise, false
      * @param lowCreditNotification True, if you want to receive low credit email notifications. Otherwise, false
      * @param enableUITooltips True, if account has tooltips active. Otherwise, false
-     * @param enableContactFeatures True, if you want to use Advanced Tools.  Otherwise, false
+     * @param enableContactFeatures True, if you want to use Contact Delivery Tools.  Otherwise, false
      * @param notificationsEmails Email addresses to send a copy of all notifications from our system. Separated by semicolon
      * @param unsubscribeNotificationsEmails Emails, separated by semicolon, to which the notification about contact unsubscribing should be sent to
      * @param logoUrl URL to your logo image.
@@ -625,7 +636,7 @@ public class Account extends API
      * @param subAccountEmail Email address of sub-account
      * @param publicAccountID Public key of sub-account to update. Use subAccountEmail or publicAccountID not both.
      * @param sendingPermission Sending permission setting for account
-     * @param enableContactFeatures True, if you want to use Advanced Tools.  Otherwise, false
+     * @param enableContactFeatures True, if you want to use Contact Delivery Tools.  Otherwise, false
      * @param poolName Name of your custom IP Pool to be used in the sending process
      * @throws Exception
      */

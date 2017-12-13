@@ -231,7 +231,7 @@ public class ApiTypes {
        public BigDecimal litmuscredits;
 
        /**
-        * Enable advanced tools on your Account.
+        * Enable contact delivery and optimization tools on your Account.
         */
        public Boolean enablecontactfeatures;
 
@@ -463,7 +463,7 @@ public class ApiTypes {
        public Boolean enableuitooltips;
 
        /**
-        * True, if you want to use Advanced Tools.  Otherwise, false
+        * True, if you want to use Contact Delivery Tools.  Otherwise, false
         */
        public Boolean enablecontactfeatures;
 
@@ -1021,6 +1021,31 @@ public class ApiTypes {
    }
 
    /**
+    * 
+    */
+   public enum CertificateValidationStatus {
+       /**
+        * 
+        */
+       ERROROCCURED,
+
+       /**
+        * 
+        */
+       CERTNOTSET,
+
+       /**
+        * 
+        */
+       VALID,
+
+       /**
+        * 
+        */
+       NOTVALID
+   }
+
+   /**
     * SMTP and HTTP API channel for grouping email delivery
     */
    public static class Channel {
@@ -1131,51 +1156,6 @@ public class ApiTypes {
        public String lastname;
 
        /**
-        * Title
-        */
-       public String title;
-
-       /**
-        * Name of organization
-        */
-       public String organizationname;
-
-       /**
-        * City.
-        */
-       public String city;
-
-       /**
-        * Name of country.
-        */
-       public String country;
-
-       /**
-        * State or province.
-        */
-       public String state;
-
-       /**
-        * Zip/postal code.
-        */
-       public String zip;
-
-       /**
-        * Phone number
-        */
-       public String phone;
-
-       /**
-        * Date of birth in YYYY-MM-DD format
-        */
-       public Date birthdate;
-
-       /**
-        * Your gender
-        */
-       public String gender;
-
-       /**
         * Name of status: Active, Engaged, Inactive, Abuse, Bounced, Unsubscribed.
         */
        public ApiTypes.ContactStatus status;
@@ -1246,84 +1226,9 @@ public class ApiTypes {
        public String createdfromip;
 
        /**
-        * Yearly revenue for the contact
-        */
-       public BigDecimal revenue;
-
-       /**
-        * Number of purchases contact has made
-        */
-       public int purchasecount;
-
-       /**
-        * Mobile phone number
-        */
-       public String mobilenumber;
-
-       /**
-        * Fax number
-        */
-       public String faxnumber;
-
-       /**
-        * Biography for Linked-In
-        */
-       public String linkedinbio;
-
-       /**
-        * Number of Linked-In connections
-        */
-       public int linkedinconnections;
-
-       /**
-        * Biography for Twitter
-        */
-       public String twitterbio;
-
-       /**
-        * User name for Twitter
-        */
-       public String twitterusername;
-
-       /**
-        * URL for Twitter photo
-        */
-       public String twitterprofilephoto;
-
-       /**
-        * Number of Twitter followers
-        */
-       public int twitterfollowercount;
-
-       /**
         * Unsubscribed date in YYYY-MM-DD format
         */
        public Date unsubscribeddate;
-
-       /**
-        * Industry contact works in
-        */
-       public String industry;
-
-       /**
-        * Number of employees
-        */
-       public int numberofemployees;
-
-       /**
-        * Annual revenue of contact
-        */
-       public BigDecimal annualrevenue;
-
-       /**
-        * Date of first purchase in YYYY-MM-DD format
-        */
-       public Date firstpurchase;
-
-       /**
-        * Date of last purchase in YYYY-MM-DD format
-        */
-       public Date lastpurchase;
 
        /**
         * Free form field of notes
@@ -1336,21 +1241,6 @@ public class ApiTypes {
        public String websiteurl;
 
        /**
-        * Number of page views
-        */
-       public int pageviews;
-
-       /**
-        * Number of website visits
-        */
-       public int visits;
-
-       /**
-        * Number of messages sent last month
-        */
-       public int lastmonthsent;
-
-       /**
         * Date this contact last opened an email
         */
        public Date lastopened;
@@ -1361,9 +1251,9 @@ public class ApiTypes {
        public Date lastclicked;
 
        /**
-        * Your gravatar hash for image
+        * Custom contact field like firstname, lastname, city etc. JSON serialized text like { "city":"london" } 
         */
-       public String gravatarhash;
+       public HashMap<String, String> customfields;
 
    }
 
@@ -1442,6 +1332,11 @@ public class ApiTypes {
         * Country of the event.
         */
        public String country;
+
+       /**
+        * Information about the event
+        */
+       public String data;
 
    }
 
@@ -1577,6 +1472,62 @@ public class ApiTypes {
    }
 
    /**
+    * Number of Unsubscribed or Complaint Contacts, grouped by Unsubscribe Reason;
+    */
+   public static class ContactUnsubscribeReasonCounts {
+       /**
+        * 
+        */
+       public long unknown;
+
+       /**
+        * 
+        */
+       public long nolongerwant;
+
+       /**
+        * 
+        */
+       public long irrelevantcontent;
+
+       /**
+        * 
+        */
+       public long toofrequent;
+
+       /**
+        * 
+        */
+       public long neverconsented;
+
+       /**
+        * 
+        */
+       public long deceptivecontent;
+
+       /**
+        * 
+        */
+       public long abusereported;
+
+       /**
+        * 
+        */
+       public long thirdparty;
+
+       /**
+        * 
+        */
+       public long listunsubscribe;
+
+       /**
+        * 
+        */
+       public long fromjourney;
+
+   }
+
+   /**
     * Type of credits
     */
    public enum CreditType {
@@ -1705,6 +1656,28 @@ public class ApiTypes {
         * 
         */
        public ApiTypes.TrackingType type;
+
+       /**
+        * 0 - NotValidated, 1 - Validated successfully, 2 - Invalid, 3 - Broken (tracking was frequnetly verfied in given period and still is invalid)
+            For statuses: 0, 1, 3 tracking will be verified in normal periods
+            For status 2 tracking will be verified in high frequent periods
+        */
+       public ApiTypes.TrackingValidationStatus trackingstatus;
+
+       /**
+        * 
+        */
+       public ApiTypes.CertificateValidationStatus certificatestatus;
+
+       /**
+        * 
+        */
+       public String certificatevalidationerror;
+
+       /**
+        * 
+        */
+       public ApiTypes.TrackingType trackingtypeuserrequest;
 
    }
 
@@ -2696,9 +2669,24 @@ public class ApiTypes {
        public String channel;
 
        /**
-        * Date in YYYY-MM-DDThh:ii:ss format
+        * Creation date
         */
        public String date;
+
+       /**
+        * 
+        */
+       public String datesent;
+
+       /**
+        * 
+        */
+       public String dateopened;
+
+       /**
+        * 
+        */
+       public String dateclicked;
 
        /**
         * Content of message, HTML encoded
@@ -3290,7 +3278,7 @@ public class ApiTypes {
        public int maxcontacts;
 
        /**
-        * True, if you want to use Advanced Tools.  Otherwise, false
+        * True, if you want to use Contact Delivery Tools.  Otherwise, false
         */
        public Boolean enablecontactfeatures;
 
@@ -3361,7 +3349,7 @@ public class ApiTypes {
        public Boolean enableprivateiprequest;
 
        /**
-        * True, if you want to use Advanced Tools.  Otherwise, false
+        * True, if you want to use Contact Delivery Tools.  Otherwise, false
         */
        public Boolean enablecontactfeatures;
 
@@ -3774,12 +3762,57 @@ public class ApiTypes {
        /**
         * 
         */
+       NONE,
+
+       /**
+        * 
+        */
+       DELETE,
+
+       /**
+        * 
+        */
        HTTP,
 
        /**
         * 
         */
-       EXTERNALHTTPS
+       EXTERNALHTTPS,
+
+       /**
+        * 
+        */
+       INTERNALCERTHTTPS,
+
+       /**
+        * 
+        */
+       LETSENCRYPTCERT
+   }
+
+   /**
+    * Status of ValidDomain used by DomainValidationService to determine how often tracking validation should be performed.
+    */
+   public enum TrackingValidationStatus {
+       /**
+        * 
+        */
+       VALIDATED,
+
+       /**
+        * 
+        */
+       NOTVALIDATED,
+
+       /**
+        * 
+        */
+       INVALID,
+
+       /**
+        * 
+        */
+       BROKEN
    }
 
    /**
@@ -3888,7 +3921,7 @@ public class ApiTypes {
        public BigDecimal litmuscreditscost;
 
        /**
-        * Daily cost of Advanced Tools
+        * Daily cost of Contact Delivery Tools
         */
        public BigDecimal contactcost;
 
@@ -3901,6 +3934,11 @@ public class ApiTypes {
         * 
         */
        public BigDecimal supportcost;
+
+       /**
+        * 
+        */
+       public BigDecimal emailcost;
 
    }
 

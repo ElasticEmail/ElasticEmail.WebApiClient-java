@@ -23,23 +23,8 @@ public class Contact extends API
      * @param email Proper email address.
      * @param publicListID ID code of list
      * @param listName Name of your list.
-     * @param title Title
      * @param firstName First name.
      * @param lastName Last name.
-     * @param phone Phone number
-     * @param mobileNumber Mobile phone number
-     * @param notes Free form field of notes
-     * @param gender Your gender
-     * @param birthDate Date of birth in YYYY-MM-DD format
-     * @param city City.
-     * @param state State or province.
-     * @param postalCode Zip/postal code.
-     * @param country Name of country.
-     * @param organizationName Name of organization
-     * @param website HTTP address of your website.
-     * @param annualRevenue Annual revenue of contact
-     * @param industry Industry contact works in
-     * @param numberOfEmployees Number of employees
      * @param source Specifies the way of uploading the contact
      * @param returnUrl URL to navigate to after account creation
      * @param sourceUrl URL from which request was sent.
@@ -53,29 +38,14 @@ public class Contact extends API
      * @return String
      * @throws Exception
      */
-    public String add(String publicAccountID, String email, String[] publicListID, String[] listName, String title, String firstName, String lastName, String phone, String mobileNumber, String notes, String gender, Date birthDate, String city, String state, String postalCode, String country, String organizationName, String website, int annualRevenue, String industry, int numberOfEmployees, ApiTypes.ContactSource source, String returnUrl, String sourceUrl, String activationReturnUrl, String activationTemplate, Boolean sendActivation, Date consentDate, String consentIP, HashMap<String, String> field, String notifyEmail) throws Exception {
+    public String add(String publicAccountID, String email, StringArray publicListID, String[] listName, String firstName, String lastName, ApiTypes.ContactSource source, String returnUrl, String sourceUrl, String activationReturnUrl, String activationTemplate, Boolean sendActivation, Date consentDate, String consentIP, HashMap<String, String> field, String notifyEmail) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("publicAccountID", publicAccountID);
        values.put("email", email);
-       values.put("publicListID", String.valueOf(publicListID));
+       if (publicListID != null) values.put("publicListID", joinList(publicListID));
        values.put("listName", String.valueOf(listName));
-       values.put("title", title);
        values.put("firstName", firstName);
        values.put("lastName", lastName);
-       values.put("phone", phone);
-       values.put("mobileNumber", mobileNumber);
-       values.put("notes", notes);
-       values.put("gender", gender);
-       if (birthDate != null) values.put("birthDate", String.valueOf(birthDate));
-       values.put("city", city);
-       values.put("state", state);
-       values.put("postalCode", postalCode);
-       values.put("country", country);
-       values.put("organizationName", organizationName);
-       values.put("website", website);
-       values.put("annualRevenue", String.valueOf(annualRevenue));
-       values.put("industry", industry);
-       values.put("numberOfEmployees", String.valueOf(numberOfEmployees));
        values.put("source", String.valueOf(source));
        values.put("returnUrl", returnUrl);
        values.put("sourceUrl", sourceUrl);
@@ -92,7 +62,7 @@ public class Contact extends API
    }
 
     /**
-     * Manually add or update a contacts status to Abuse, Bounced or Unsubscribed status (blocked).
+     * Manually add or update a contacts status to Abuse or Unsubscribed status (blocked).
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param email Proper email address.
      * @param status Name of status: Active, Engaged, Inactive, Abuse, Bounced, Unsubscribed.
@@ -129,16 +99,14 @@ public class Contact extends API
      * @param status Name of status: Active, Engaged, Inactive, Abuse, Bounced, Unsubscribed.
      * @param rule Query used for filtering.
      * @param emails Comma delimited list of contact emails
-     * @param allContacts True: Include every Contact in your Account. Otherwise, false
      * @throws Exception
      */
-    public void changeStatus(ApiTypes.ContactStatus status, String rule, StringArray emails, Boolean allContacts) throws Exception {
+    public void changeStatus(ApiTypes.ContactStatus status, String rule, StringArray emails) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("status", String.valueOf(status));
        values.put("rule", rule);
        if (emails != null) values.put("emails", joinList(emails));
-       values.put("allContacts", String.valueOf(allContacts));
        uploadValues(API_URI + "/contact/changestatus", values, VoidApiResponse.class);
    }
 
@@ -159,19 +127,29 @@ public class Contact extends API
    }
 
     /**
+     * Returns count of unsubscribe reasons for unsubscribed and complaint contacts.
+     * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
+     * @return ApiTypes.ContactUnsubscribeReasonCounts
+     * @throws Exception
+     */
+    public ApiTypes.ContactUnsubscribeReasonCounts countByUnsubscribeReason() throws Exception {
+       HashMap<String, String> values = new HashMap<String, String>();
+       values.put("apikey", API_KEY);
+       return uploadValues(API_URI + "/contact/countbyunsubscribereason", values, ApiTypes.ContactUnsubscribeReasonCounts.class);
+   }
+
+    /**
      * Permanantly deletes the contacts provided.  You can provide either a qualified rule or a list of emails (comma separated string).
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param rule Query used for filtering.
      * @param emails Comma delimited list of contact emails
-     * @param allContacts True: Include every Contact in your Account. Otherwise, false
      * @throws Exception
      */
-    public void delete(String rule, StringArray emails, Boolean allContacts) throws Exception {
+    public void delete(String rule, StringArray emails) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("rule", rule);
        if (emails != null) values.put("emails", joinList(emails));
-       values.put("allContacts", String.valueOf(allContacts));
        uploadValues(API_URI + "/contact/delete", values, VoidApiResponse.class);
    }
 
@@ -181,19 +159,17 @@ public class Contact extends API
      * @param fileFormat Format of the exported file
      * @param rule Query used for filtering.
      * @param emails Comma delimited list of contact emails
-     * @param allContacts True: Include every Contact in your Account. Otherwise, false
      * @param compressionFormat FileResponse compression format. None or Zip.
      * @param fileName Name of your file.
      * @return ApiTypes.ExportLink
      * @throws Exception
      */
-    public ApiTypes.ExportLink export(ApiTypes.ExportFileFormats fileFormat, String rule, StringArray emails, Boolean allContacts, ApiTypes.CompressionFormat compressionFormat, String fileName) throws Exception {
+    public ApiTypes.ExportLink export(ApiTypes.ExportFileFormats fileFormat, String rule, StringArray emails, ApiTypes.CompressionFormat compressionFormat, String fileName) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("fileFormat", String.valueOf(fileFormat));
        values.put("rule", rule);
        if (emails != null) values.put("emails", joinList(emails));
-       values.put("allContacts", String.valueOf(allContacts));
        values.put("compressionFormat", String.valueOf(compressionFormat));
        values.put("fileName", fileName);
        return uploadValues(API_URI + "/contact/export", values, ApiTypes.ExportLink.class);
@@ -253,17 +229,15 @@ public class Contact extends API
      * List of all contacts. If you have not specified RULE, all Contacts will be listed.
      * @param apikey ApiKey that gives you access to our SMTP and HTTP API's.
      * @param rule Query used for filtering.
-     * @param allContacts True: Include every Contact in your Account. Otherwise, false
      * @param limit Maximum of loaded items.
      * @param offset How many items should be loaded ahead.
      * @return ApiTypes.ContactArray
      * @throws Exception
      */
-    public ApiTypes.ContactArray list(String rule, Boolean allContacts, int limit, int offset) throws Exception {
+    public ApiTypes.ContactArray list(String rule, int limit, int offset) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("rule", rule);
-       values.put("allContacts", String.valueOf(allContacts));
        values.put("limit", String.valueOf(limit));
        values.put("offset", String.valueOf(offset));
        return uploadValues(API_URI + "/contact/list", values, ApiTypes.ContactArray.class);
@@ -327,41 +301,31 @@ public class Contact extends API
      * @param emails Comma delimited list of contact emails
      * @param firstName First name.
      * @param lastName Last name.
-     * @param title Title
-     * @param organization Name of organization
-     * @param industry Industry contact works in
-     * @param city City.
-     * @param country Name of country.
-     * @param state State or province.
-     * @param zip Zip/postal code.
      * @param publicListID ID code of list
      * @param listName Name of your list.
      * @param status Name of status: Active, Engaged, Inactive, Abuse, Bounced, Unsubscribed.
      * @param notes Free form field of notes
      * @param consentDate Date of consent to send this contact(s) your email. If not provided current date is used for consent.
      * @param consentIP IP address of consent to send this contact(s) your email. If not provided your current public IP address is used for consent.
+     * @param field Custom contact field like firstname, lastname, city etc. Request parameters prefixed by field_ like field_firstname, field_lastname 
      * @param notifyEmail Emails, separated by semicolon, to which the notification about contact subscribing should be sent to
      * @throws Exception
      */
-    public void quickAdd(StringArray emails, String firstName, String lastName, String title, String organization, String industry, String city, String country, String state, String zip, String publicListID, String listName, ApiTypes.ContactStatus status, String notes, Date consentDate, String consentIP, String notifyEmail) throws Exception {
+    public void quickAdd(StringArray emails, String firstName, String lastName, String publicListID, String listName, ApiTypes.ContactStatus status, String notes, Date consentDate, String consentIP, HashMap<String, String> field, String notifyEmail) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        if (emails != null) values.put("emails", joinList(emails));
        values.put("firstName", firstName);
        values.put("lastName", lastName);
-       values.put("title", title);
-       values.put("organization", organization);
-       values.put("industry", industry);
-       values.put("city", city);
-       values.put("country", country);
-       values.put("state", state);
-       values.put("zip", zip);
        values.put("publicListID", publicListID);
        values.put("listName", listName);
        values.put("status", String.valueOf(status));
        values.put("notes", notes);
        if (consentDate != null) values.put("consentDate", String.valueOf(consentDate));
        values.put("consentIP", consentIP);
+       if (field != null) 
+           for (String key : field.keySet())
+              values.put("field_" + key, field.get(key));
        values.put("notifyEmail", notifyEmail);
        uploadValues(API_URI + "/contact/quickadd", values, VoidApiResponse.class);
    }
@@ -384,77 +348,23 @@ public class Contact extends API
      * @param email Proper email address.
      * @param firstName First name.
      * @param lastName Last name.
-     * @param organizationName Name of organization
-     * @param title Title
-     * @param city City.
-     * @param state State or province.
-     * @param country Name of country.
-     * @param zip Zip/postal code.
-     * @param birthDate Date of birth in YYYY-MM-DD format
-     * @param gender Your gender
-     * @param phone Phone number
-     * @param activate True, if Contact should be activated. Otherwise, false
-     * @param industry Industry contact works in
-     * @param numberOfEmployees Number of employees
-     * @param annualRevenue Annual revenue of contact
-     * @param purchaseCount Number of purchases contact has made
-     * @param firstPurchase Date of first purchase in YYYY-MM-DD format
-     * @param lastPurchase Date of last purchase in YYYY-MM-DD format
-     * @param notes Free form field of notes
-     * @param websiteUrl Website of contact
-     * @param mobileNumber Mobile phone number
-     * @param faxNumber Fax number
-     * @param linkedInBio Biography for Linked-In
-     * @param linkedInConnections Number of Linked-In connections
-     * @param twitterBio Biography for Twitter
-     * @param twitterUsername User name for Twitter
-     * @param twitterProfilePhoto URL for Twitter photo
-     * @param twitterFollowerCount Number of Twitter followers
-     * @param pageViews Number of page views
-     * @param visits Number of website visits
      * @param clearRestOfFields States if the fields that were omitted in this request are to be reset or should they be left with their current value
      * @param field Custom contact field like firstname, lastname, city etc. Request parameters prefixed by field_ like field_firstname, field_lastname 
+     * @param customFields Custom contact field like firstname, lastname, city etc. JSON serialized text like { "city":"london" } 
      * @return ApiTypes.Contact
      * @throws Exception
      */
-    public ApiTypes.Contact update(String email, String firstName, String lastName, String organizationName, String title, String city, String state, String country, String zip, String birthDate, String gender, String phone, Boolean activate, String industry, int numberOfEmployees, String annualRevenue, int purchaseCount, String firstPurchase, String lastPurchase, String notes, String websiteUrl, String mobileNumber, String faxNumber, String linkedInBio, int linkedInConnections, String twitterBio, String twitterUsername, String twitterProfilePhoto, int twitterFollowerCount, int pageViews, int visits, Boolean clearRestOfFields, HashMap<String, String> field) throws Exception {
+    public ApiTypes.Contact update(String email, String firstName, String lastName, Boolean clearRestOfFields, HashMap<String, String> field, String customFields) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("email", email);
        values.put("firstName", firstName);
        values.put("lastName", lastName);
-       values.put("organizationName", organizationName);
-       values.put("title", title);
-       values.put("city", city);
-       values.put("state", state);
-       values.put("country", country);
-       values.put("zip", zip);
-       values.put("birthDate", birthDate);
-       values.put("gender", gender);
-       values.put("phone", phone);
-       values.put("activate", String.valueOf(activate));
-       values.put("industry", industry);
-       values.put("numberOfEmployees", String.valueOf(numberOfEmployees));
-       values.put("annualRevenue", annualRevenue);
-       values.put("purchaseCount", String.valueOf(purchaseCount));
-       values.put("firstPurchase", firstPurchase);
-       values.put("lastPurchase", lastPurchase);
-       values.put("notes", notes);
-       values.put("websiteUrl", websiteUrl);
-       values.put("mobileNumber", mobileNumber);
-       values.put("faxNumber", faxNumber);
-       values.put("linkedInBio", linkedInBio);
-       values.put("linkedInConnections", String.valueOf(linkedInConnections));
-       values.put("twitterBio", twitterBio);
-       values.put("twitterUsername", twitterUsername);
-       values.put("twitterProfilePhoto", twitterProfilePhoto);
-       values.put("twitterFollowerCount", String.valueOf(twitterFollowerCount));
-       values.put("pageViews", String.valueOf(pageViews));
-       values.put("visits", String.valueOf(visits));
        values.put("clearRestOfFields", String.valueOf(clearRestOfFields));
        if (field != null) 
            for (String key : field.keySet())
               values.put("field_" + key, field.get(key));
+       values.put("customFields", customFields);
        return uploadValues(API_URI + "/contact/update", values, ApiTypes.Contact.class);
    }
 

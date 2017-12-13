@@ -82,13 +82,13 @@ public class Email extends API
      * @param headers Optional Custom Headers. Request parameters prefixed by headers_ like headers_customheader1, headers_customheader2. Note: a space is required after the colon before the custom header value. headers_xmailer=xmailer: header-value1
      * @param postBack Optional header returned in notifications.
      * @param merge Request parameters prefixed by merge_ like merge_firstname, merge_lastname. If sending to a template you can send merge_ fields to merge data with the template. Template fields are entered with {firstname}, {lastname} etc.
-     * @param timeOffSetMinutes Number of minutes in the future this email should be sent
+     * @param timeOffSetMinutes Number of minutes in the future this email should be sent up to a maximum of 1 year (524160 minutes)
      * @param poolName Name of your custom IP Pool to be used in the sending process
      * @param isTransactional True, if email is transactional (non-bulk, non-marketing, non-commercial). Otherwise, false
      * @return ApiTypes.EmailSend
      * @throws Exception
      */
-    public ApiTypes.EmailSend send(String subject, String from, String fromName, String sender, String senderName, String msgFrom, String msgFromName, String replyTo, String replyToName, StringArray to, String[] msgTo, String[] msgCC, String[] msgBcc, StringArray lists, StringArray segments, String mergeSourceFilename, String channel, String bodyHtml, String bodyText, String charset, String charsetBodyHtml, String charsetBodyText, ApiTypes.EncodingType encodingType, String template, Iterable<FileData> attachmentFiles, HashMap<String, String> headers, String postBack, HashMap<String, String> merge, String timeOffSetMinutes, String poolName, Boolean isTransactional) throws Exception {
+    public ApiTypes.EmailSend send(String subject, String from, String fromName, String sender, String senderName, String msgFrom, String msgFromName, String replyTo, String replyToName, StringArray to, StringArray msgTo, StringArray msgCC, StringArray msgBcc, StringArray lists, StringArray segments, String mergeSourceFilename, String channel, String bodyHtml, String bodyText, String charset, String charsetBodyHtml, String charsetBodyText, ApiTypes.EncodingType encodingType, String template, Iterable<FileData> attachmentFiles, HashMap<String, String> headers, String postBack, HashMap<String, String> merge, String timeOffSetMinutes, String poolName, Boolean isTransactional) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("subject", subject);
@@ -101,9 +101,9 @@ public class Email extends API
        values.put("replyTo", replyTo);
        values.put("replyToName", replyToName);
        if (to != null) values.put("to", joinList(to));
-       values.put("msgTo", String.valueOf(msgTo));
-       values.put("msgCC", String.valueOf(msgCC));
-       values.put("msgBcc", String.valueOf(msgBcc));
+       if (msgTo != null) values.put("msgTo", joinList(msgTo));
+       if (msgCC != null) values.put("msgCC", joinList(msgCC));
+       if (msgBcc != null) values.put("msgBcc", joinList(msgBcc));
        if (lists != null) values.put("lists", joinList(lists));
        if (segments != null) values.put("segments", joinList(segments));
        values.put("mergeSourceFilename", mergeSourceFilename);

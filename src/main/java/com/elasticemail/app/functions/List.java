@@ -218,9 +218,10 @@ public class List extends API
      * @param emails Comma delimited list of contact emails
      * @param moveAll TRUE - moves all contacts; FALSE - moves contacts provided in the 'emails' parameter. This is ignored if the 'statuses' parameter has been provided
      * @param statuses List of contact statuses which are eligible to move. This ignores the 'moveAll' parameter
+     * @param rule Query used for filtering.
      * @throws Exception
      */
-    public void moveContacts(String oldListName, String newListName, StringArray emails, Boolean moveAll, ApiTypes.ContactStatusArray statuses) throws Exception {
+    public void moveContacts(String oldListName, String newListName, StringArray emails, Boolean moveAll, ApiTypes.ContactStatusArray statuses, String rule) throws Exception {
        HashMap<String, String> values = new HashMap<String, String>();
        values.put("apikey", API_KEY);
        values.put("oldListName", oldListName);
@@ -228,6 +229,7 @@ public class List extends API
        if (emails != null) values.put("emails", joinList(emails));
        values.put("moveAll", String.valueOf(moveAll));
        if (statuses != null) if (statuses != null) values.put("statuses", joinList(statuses));
+       values.put("rule", rule);
        uploadValues(API_URI + "/list/movecontacts", values, VoidApiResponse.class);
    }
 

@@ -21,6 +21,7 @@ com\elasticemail\app\ApiTypes$CampaignTemplate.class
 com\elasticemail\app\ApiTypes$DomainDetailArray.class
 com\elasticemail\app\ApiTypes$SubAccountArray.class
 com\elasticemail\app\ApiTypes$CampaignChannelArray.class
+com\elasticemail\app\ApiTypes$ContactUnsubscribeReasonCounts.class
 com\elasticemail\app\ApiTypes$ContactHistoryArray.class
 com\elasticemail\app\ApiTypes$MessageCategoryArray.class
 com\elasticemail\app\functions\Domain.class
@@ -41,6 +42,7 @@ com\elasticemail\app\ApiTypes$SendingPermission.class
 com\elasticemail\app\ApiTypes$StringArray.class
 com\elasticemail\app\functions\SMS.class
 com\elasticemail\app\ApiTypes$DailyLogStatusSummary.class
+com\elasticemail\app\ApiTypes$CertificateValidationStatus.class
 com\elasticemail\app\ApiTypes$Payment.class
 com\elasticemail\app\FileData.class
 com\elasticemail\app\ApiTypes$SplitOptimization.class
@@ -110,6 +112,7 @@ com\elasticemail\app\ApiTypes$ExportArray.class
 com\elasticemail\app\functions\Template.class
 com\elasticemail\app\ApiTypes$ContactContainer.class
 com\elasticemail\app\ApiTypes$LinkTrackingDetails.class
+com\elasticemail\app\ApiTypes$TrackingValidationStatus.class
 com\elasticemail\app\ApiTypes$SegmentArray.class
 com\elasticemail\app\ApiTypes$ContactHistory.class
 com\elasticemail\app\ApiTypes$ContactSource.class

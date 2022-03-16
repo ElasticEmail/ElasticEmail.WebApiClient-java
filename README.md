@@ -1,3 +1,7 @@
+**LEGACY**
+
+New version of API - https://github.com/ElasticEmail/elasticemail-java
+
 **This library allows you to quickly and easily use the Elastic Email Web API v2 via Java.**
 
 # Prerequisites #
